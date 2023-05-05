@@ -1,9 +1,8 @@
-#include "disk/disk.h"
+#include "disk.h"
 #include "io/io.h"
-#include "memory/memory.h"
 #include "config.h"
 #include "status.h"
-#include "kernel.h"
+#include "memory/memory.h"
 
 struct disk disk;
 
@@ -46,15 +45,15 @@ void disk_search_and_init()
 
 struct disk* disk_get(int index)
 {
-    if(index != 0)
+    if (index != 0)
         return 0;
-
+    
     return &disk;
 }
 
-int read_disk_block(struct disk* idisk, int lba, int total, void* buf)
+int disk_read_block(struct disk* idisk, unsigned int lba, int total, void* buf)
 {
-    if(idisk != &disk)
+    if (idisk != &disk)
     {
         return -EIO;
     }
