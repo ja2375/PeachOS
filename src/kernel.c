@@ -92,12 +92,16 @@ void kernel_main()
 
     // Search and initialize the disks
     disk_search_and_init();
-    print("Disk driver initialized");
+    println("Disk driver initialized");
     print("Read LBA0 from disk 0: ");
     char buf[512];
     read_disk_block(disk_get(0), 0, 1, &buf);
     print("READ: ");
-    // TODO: Implement printf() to actually print [buf].
+    // TODO: Replace this with a proper printf implementation.
+    for(size_t i = 0; i < sizeof(buf); i++)
+    {
+        print(buf[i]);
+    }
     print("\n");
 
     // Initialize the IDT
