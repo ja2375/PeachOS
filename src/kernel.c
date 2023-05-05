@@ -3,8 +3,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-extern void problem();
-
 uint16_t* video_mem = 0;
 uint16_t terminal_row = 0;
 uint16_t terminal_col = 0;
@@ -78,6 +76,4 @@ void kernel_main()
 
     // Initialize the IDT
     idt_init();
-
-    problem();
 }
