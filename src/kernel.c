@@ -83,7 +83,7 @@ void kernel_main()
     disk_search_and_init();
     println("Disk driver initialized");
     char buf[512];
-    read_disk_block(disk_get(0), 0, 1, &buf);
+    read_disk_block(disk_get(0), 0, 1, buf);
 
     // Initialize the IDT
     idt_init();
