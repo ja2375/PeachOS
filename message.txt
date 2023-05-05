@@ -1,1 +1,0 @@
-Hola! Este mensaje lo estoy escribiendo en un archivo, que posteriormente copio en el sector 2 del bootloader. Despues lo leo de ese sector como si fuera un disco duro virtual.
