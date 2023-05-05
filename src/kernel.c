@@ -73,42 +73,54 @@ void print(const char* str)
     }
 }
 
+void println(const char* str)
+{
+    print(str);
+    print("\n");
+}
+
 static struct paging_4gb_chunk* kernel_chunk = 0;
 
 void kernel_main()
 {
     terminal_initialize();
-    print("Terminal initiated\n");
+    println("Terminal initiated");
 
     // Initialize the heap
     kheap_init();
-    print("Heap initialized\n");
+    println("Heap initialized");
 
     // Search and initialize the disks
     disk_search_and_init();
-    print("Disk driver initialized\n");
+    print("Disk driver initialized");
+    print("Read LBA0 from disk 0: ");
+    char buf[512];
+    read_disk_block(disk_get(0), 0, 1, &buf);
+    print("READ: ");
+    // TODO: Implement printf() to actually print [buf].
+    print("\n");
 
     // Initialize the IDT
     idt_init();
-    print("IDT initialized\n");
+    println("IDT initialized");
 
     //
     // START: PAGING
     //
 
-    print("Setting up paging...\n");
+    println("Setting up paging...");
     
     // Setup paging
     kernel_chunk = paging_new_4gb(PAGING_IS_WRITEABLE | PAGING_IS_PRESENT | PAGING_ACCESS_FROM_ALL);
-    print("Loaded kernel chunk\n");
+    println("Loaded kernel chunk");
 
     // Switch to kernel paging chunk
     paging_switch(paging_4gb_chunk_get_directory(kernel_chunk));
-    print("Switched page\n");
+    println("Switched page");
 
     // Enable paging
     enable_paging();
-    print("Successfully enabled paging!\n");
+    println("Successfully enabled paging!");
 
     //
     // END: PAGING
@@ -117,5 +129,5 @@ void kernel_main()
     // Enable interrupts in assembly only after
     // correctly initializing the IDT
     enable_interrupts();
-    print("Enabled interrupts\n");
+    println("Enabled interrupts");
 }
