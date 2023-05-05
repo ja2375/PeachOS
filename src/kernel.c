@@ -77,26 +77,53 @@ static struct paging_4gb_chunk* kernel_chunk = 0;
 void kernel_main()
 {
     terminal_initialize();
-    print("Hello world!\ntest\n");
+    print("Terminal initiated\n");
 
     // Initialize the heap
     kheap_init();
+    print("Heap initialized\n");
 
     // Initialize the IDT
     idt_init();
+    print("IDT initialized\n");
 
     //
     // START: PAGING
     //
+
+    print("Setting up paging...\n");
     
     // Setup paging
-    kernel_chunk = paging_new_4gb(PAGING_IS_WRITABLE | PAGING_IS_PRESENT | PAGING_ACCESS_FROM_ALL);
-    
+    kernel_chunk = paging_new_4gb(PAGING_IS_WRITEABLE | PAGING_IS_PRESENT | PAGING_ACCESS_FROM_ALL);
+    print("Loaded kernel chunk\n");
+
     // Switch to kernel paging chunk
     paging_switch(paging_4gb_chunk_get_directory(kernel_chunk));
+    print("Switched page\n");
+
+    char* ptr = kzalloc(4096);
+    paging_set(paging_4gb_chunk_get_directory(kernel_chunk), (void*)0x1000, (uint32_t)ptr | PAGING_ACCESS_FROM_ALL | PAGING_IS_PRESENT | PAGING_IS_WRITEABLE);
+    print("Page set\n");
 
     // Enable paging
     enable_paging();
+    print("Successfully enabled paging!\n");
+
+    // Some paging tests
+    // The variable [ptr] holds the address we got
+    // from kzalloc, which gave us some address that we are
+    // fine to write to. Then we told the paging system
+    // to set a page to map the virtual address 0x1000 (look above)
+    // and now we are creating a pointer [ptr2] to that virtual address
+    // and writing AB to it. Then we print it out twice, in order to verify
+    // that indeed out 2 pointers both point to the same physical address.
+    // That's the magic of paging.
+    char* ptr2 = (char*)0x1000;
+    ptr2[0] = 'A';
+    ptr2[1] = 'B';
+    print(ptr2);
+    print(ptr);
+    print("\n");
 
     //
     // END: PAGING
@@ -105,4 +132,5 @@ void kernel_main()
     // Enable interrupts in assembly only after
     // correctly initializing the IDT
     enable_interrupts();
+    print("Enabled interrupts\n");
 }
