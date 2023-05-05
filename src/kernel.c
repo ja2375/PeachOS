@@ -84,6 +84,10 @@ void kernel_main()
     kheap_init();
     print("Heap initialized\n");
 
+    // Search and initialize the disks
+    disk_search_and_init();
+    print("Disk driver initialized\n");
+
     // Initialize the IDT
     idt_init();
     print("IDT initialized\n");
@@ -109,9 +113,6 @@ void kernel_main()
     //
     // END: PAGING
     //
-
-    char buff[512];
-    disk_read_sector(0, 1, buff);
 
     // Enable interrupts in assembly only after
     // correctly initializing the IDT
