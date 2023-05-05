@@ -81,4 +81,8 @@ void kernel_main()
 
     // Initialize the IDT
     idt_init();
+
+    // Enable interrupts in assembly only after
+    // correctly initializing the IDT
+    enable_interrupts();
 }
