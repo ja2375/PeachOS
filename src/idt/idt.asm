@@ -17,14 +17,16 @@ disable_interrupts:
     cli
     ret
 
+
 idt_load:
     push ebp
     mov ebp, esp
 
     mov ebx, [ebp+8]
     lidt [ebx]
-    pop ebp
+    pop ebp    
     ret
+
 
 int21h:
     cli

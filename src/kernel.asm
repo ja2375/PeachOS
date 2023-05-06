@@ -1,6 +1,6 @@
 [BITS 32]
-global _start
 
+global _start
 extern kernel_main
 
 CODE_SEG equ 0x08
@@ -25,12 +25,12 @@ _start:
     mov al, 00010001b
     out 0x20, al ; Tell master PIC
 
-    mov al, 0x20
+    mov al, 0x20 ; Interrupt 0x20 is where master ISR should start
     out 0x21, al
 
     mov al, 00000001b
     out 0x21, al
-    ; End remapping the master PIC
+    ; End remap of the master PIC
 
     call kernel_main
 

@@ -3,8 +3,8 @@
 
 typedef unsigned int PEACHOS_DISK_TYPE;
 
-// Represent a real physical hard disk
-#define PEACHOS_DISK_TYPE_REAL 0;
+// Represents a real physical hard disk
+#define PEACHOS_DISK_TYPE_REAL 0
 
 struct disk
 {
